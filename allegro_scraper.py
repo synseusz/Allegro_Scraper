@@ -22,11 +22,20 @@ headers = {
 current_page = [1]
 results = []
 
+
 def create_url(item_search):
     search_term = item_search.replace(" ", "%20")
     URL = 'https://allegro.pl/listing?string=%s&bmatch=cl-dict20110-m-ctx-ele-1-2-1125' % (search_term)
     return URL
 
+def reverse_string_order(string):
+    # first split the string into words
+    words = string.split(' ')
+
+    # reverse the split string list and join using space
+    reverse_string = ' '.join(reversed(words))
+
+    return reverse_string
 
 def items_check():
     if current_page[0] == 1:
