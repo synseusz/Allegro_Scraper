@@ -107,6 +107,10 @@ def check_for_new_items():
         print("No previous listings found or error while reading listed_items.csv")
         return None
 
+def save_to_csvfile():
+    with open('listed_items.csv', 'w') as writer:
+        my_writer = csv.writer(writer)
+        my_writer.writerows(currently_listed_items)  
 
 def items_check():
     if current_page[0] == 1:
@@ -180,6 +184,8 @@ def items_check():
     else:
         print("\nNo results found!")
 
+    # save current items on listing to a csv file for further reference
+    save_to_csvfile()
 
 ########################################################################
 #CALL MAIN FUNCTION
