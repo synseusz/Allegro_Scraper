@@ -37,6 +37,51 @@ def reverse_string_order(string):
 
     return reverse_string
 
+def send_email(new_items, check_results):
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.ehlo()
+    server.starttls()
+    server.ehlo()
+
+    server.login("piotr.mikolaj.orlowski@gmail.com", "gyxpvwfkczllcoio")
+
+    if new_items:
+        if len(new_items) > 1:
+            variable = "%s items have been added to your listing"%(len(new_items))
+
+        else:
+            variable = "%s item has been added to your listing"%(len(new_items))
+
+        subject = variable
+        body_initial = "The following %s item(s) listed below was recently added to your listing:"%(len(new_items))
+
+        msg = "Subject: %s\n\n%s\n\n%s"%(subject, body_initial, [new_item for new_item in new_items])
+        converted_msg = msg.replace("[", "").replace("]", "").replace("&&", "\n").replace("'", "").replace(", ", "\n\n")
+
+        server.sendmail(
+            "piotr.mikolaj.orlowski@gmail.com",
+            "thesynseusz@gmail.com",
+            converted_msg.encode('ascii', 'ignore')
+        )
+        print("New Items email has been sent!")
+
+    if check_results:
+        subject = "Item found!"
+        body_initial = "The following %s item(s) listed below match your expectations:"%(len(check_results))
+        
+        msg = "Subject: %s\n\n%s\n\nDESIRED PRICE: %s zl or less.\n\n%s"%(subject, body_initial, desired_price, [result for result in check_results])
+        converted_msg = msg.replace("[", "").replace("]", "").replace("&&", "\n").replace("'", "").replace(", ", "\n\n").replace('"', "")
+
+        server.sendmail(
+            "piotr.mikolaj.orlowski@gmail.com",
+            "thesynseusz@gmail.com",
+            converted_msg.encode('ascii', 'ignore')
+        )
+        print("Results email has been sent!")
+
+
+    server.quit()
+
 def check_for_new_items():
     try:
 
