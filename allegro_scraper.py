@@ -21,3 +21,8 @@ headers = {
 
 current_page = [1]
 results = []
+
+def create_url(item_search):
+    search_term = item_search.replace(" ", "%20")
+    URL = 'https://allegro.pl/listing?string=%s&bmatch=cl-dict20110-m-ctx-ele-1-2-1125' % (search_term)
+    return URL
