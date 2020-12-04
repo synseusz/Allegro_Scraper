@@ -37,6 +37,32 @@ def reverse_string_order(string):
 
     return reverse_string
 
+def check_for_new_items():
+    try:
+
+        with open('listed_items.csv') as reader:
+            previously_listed_items = list(csv.reader(reader))
+            print("Items listed during last check: ", len(previously_listed_items))
+
+            new_items = []
+            for item in currently_listed_items:
+                if item not in previously_listed_items:
+                    title = item[0]
+                    price = item[1]
+                    link = item[2]
+                    new_items.append("--> %s&&Price: %s zl&&Link: %s"%(title, price, link))
+            
+            if len(new_items) > 0:
+                return new_items
+            else:
+                return None
+          
+           
+    except:
+        print("No previous listings found or error while reading listed_items.csv")
+        return None
+
+
 def items_check():
     if current_page[0] == 1:
         URL = create_url(item_search)
@@ -87,6 +113,27 @@ def items_check():
     elif number_of_pages == current_page[0]:
         current_page.clear()
         current_page.append(1)
+
+
+    # check for new items on listing
+    try:
+        new_items = check_for_new_items()
+    except:
+        print("Unable to check for new items")
+
+    # send email if new item found
+    if new_items:
+        print("NEW ITEMS: ", new_items)
+        send_email(new_items, None)
+    else:
+        print("\nNo new items listed since last check!")
+    
+    # send email if results found
+    if len(results) > 0:
+        print("\nCHECK RESULTS: ",results)
+        send_email(None, results)
+    else:
+        print("\nNo results found!")
 
 
 ########################################################################
