@@ -43,6 +43,41 @@ def items_check():
         class_="mpof_ki mqen_m6 mp7g_oh mh36_0 mvrt_0 mg9e_8 mj7a_8 m7er_k4 _1y62o _9c44d_1I1gg")
     print("\nTotal items on this page: ", len(listed_items_html))
 
+    # reverse item_search order
+    reversed_item_search = reverse_string_order(item_search)
+
+    # currently listed items
+    global currently_listed_items
+    currently_listed_items = []
+
+
+    for item in listed_items_html:
+        title = item.h2.a.text.replace(',', '')
+        price = item(class_="msa3_z4 _9c44d_2K6FN")[0]
+        converted_price = float(price.text.replace(",", ".").replace("zł", ""))
+
+        currently_listed_items.append([title, str(converted_price), item.h2.a.get('href')])
+
+        if item_search.lower() in title.lower() or reversed_item_search.lower() in title.lower():
+
+            if converted_price <= float(desired_price):
+                
+                result_format = "--> %s&&Price: %s zl&&Link: %s"%(title, converted_price, item.h2.a.get('href'))
+                
+                results.append(result_format)
+
+
+    if number_of_pages > 1 and number_of_pages > current_page[0]:
+        next_page = current_page[0] + 1
+
+        current_page.clear()
+        current_page.append(next_page)
+
+        items_check()
+
+    elif number_of_pages == current_page[0]:
+        current_page.clear()
+        current_page.append(1)
 
 
 ########################################################################
